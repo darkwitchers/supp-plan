@@ -1,10 +1,10 @@
-const CACHE_NAME = 'supp-plan-final-v1';
+const CACHE_NAME = 'supp-plan-final-v2';
 const FILES_TO_CACHE = [
-  './',
-  './index.html',
-  './manifest.json',
-  './icon-192.svg',
-  './icon-512.svg'
+  '/supp-plan/',
+  '/supp-plan/index.html',
+  '/supp-plan/manifest.json',
+  '/supp-plan/icon-192.svg',
+  '/supp-plan/icon-512.svg'
 ];
 
 self.addEventListener('install', event => {
