@@ -1,13 +1,14 @@
 {
   "name": "خطة مكملاتي اليومية",
   "short_name": "مكملاتي",
-  "start_url": "./index.html",
+  "start_url": "/supp-plan/",
+  "scope": "/supp-plan/",
   "display": "standalone",
   "background_color": "#0b1220",
   "theme_color": "#0b1220",
   "lang": "ar",
   "dir": "rtl",
-  "description": "تتبع يومي لمكملاتي ومؤشرات الطاقة والنوم والمزاج",
+  "description": "تتبع يومي للمكملات والطاقة والنوم والمزاج",
   "icons": [
     {
       "src": "icon-192.svg",
