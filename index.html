@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>خطة مكملاتي اليومية</title>
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="description" content="خطة مكملاتي اليومية - تتبع المكملات والطاقة والنوم والمزاج" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="icon-192.svg" />
+  <style>
+    :root{
+      --bg:#0b1220;
+      --bg2:#111a2b;
+      --card:#141f33;
+      --card2:#18253d;
+      --ink:#edf4ff;
+      --muted:#9fb0c9;
+      --primary:#7fb3ff;
+      --secondary:#34d3b4;
+      --line:#24324a;
+      --accent:#8b5cf6;
+      --danger:#ef4444;
+      --shadow:0 12px 30px rgba(0,0,0,.28);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Tahoma","Segoe UI",Arial,sans-serif;
+      background:linear-gradient(180deg,var(--bg) 0%, #0f1728 100%);
+      color:var(--ink);
+    }
+    .wrap{
+      max-width:1150px;
+      margin:auto;
+      padding:20px 14px 42px;
+    }
+    .hero{
+      background:linear-gradient(135deg,#162744,#0f3761);
+      border:1px solid #224267;
+      border-radius:24px;
+      padding:24px 20px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+    .hero h1{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.2;
+      color:#fff;
+    }
+    .hero p{
+      margin:6px 0;
+      color:#d8e7ff;
+      line-height:1.85;
+      font-size:15px;
+    }
+    .date{
+      display:inline-block;
+      margin-top:10px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.08);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:14px;
+      color:#e8f1ff;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1.35fr .95fr;
+      gap:18px;
+    }
+    @media (max-width:950px){
+      .grid{grid-template-columns:1fr}
+    }
+    .card{
+      background:linear-gradient(180deg,var(--card) 0%, var(--card2) 100%);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-bottom:18px;
+    }
+    .card h2{
+      margin:0 0 14px;
+      font-size:22px;
+      color:#dceaff;
+    }
+    .sub{
+      color:var(--muted);
+      margin:-5px 0 14px;
+      line-height:1.8;
+      font-size:14px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      overflow:hidden;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#10192a;
+    }
+    th,td{
+      padding:12px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:right;
+      vertical-align:top;
+      font-size:14px;
+      line-height:1.75;
+    }
+    th{
+      background:#122038;
+      color:#d8e8ff;
+      font-weight:700;
+    }
+    tr:last-child td{border-bottom:none}
+    .badge{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+      border:1px solid transparent;
+    }
+    .b-food{background:rgba(52,211,180,.12);color:#7ff0d5;border-color:rgba(52,211,180,.25)}
+    .b-night{background:rgba(139,92,246,.12);color:#ccb8ff;border-color:rgba(139,92,246,.22)}
+    .timeline{display:grid;gap:12px}
+    .step{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#10192a;
+    }
+    .step strong{
+      display:block;
+      color:#e3eeff;
+      margin-bottom:6px;
+      font-size:16px;
+    }
+    .step small{
+      color:var(--muted);
+      line-height:1.8;
+      font-size:14px;
+    }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:0 0 14px;
+    }
+    button{
+      border:none;
+      background:#1e4f88;
+      color:#fff;
+      padding:10px 14px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:14px;
+      box-shadow:var(--shadow);
+    }
+    button.secondary{background:#14806d}
+    button.ghost{
+      background:#0f1728;
+      border:1px solid var(--line);
+      color:#cfe0ff;
+      box-shadow:none;
+    }
+    button.danger{background:var(--danger)}
+    .check-cell{text-align:center}
+    input[type="checkbox"]{
+      width:18px;
+      height:18px;
+      accent-color:var(--secondary);
+      cursor:pointer;
+    }
+    .notes{margin:0;padding-right:18px}
+    .notes li{
+      margin:8px 0;
+      line-height:1.85;
+      color:#d2def2;
+    }
+    .metrics{display:grid;gap:14px}
+    .metric{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#10192a;
+    }
+    .metric .top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .metric .top span{
+      font-weight:700;
+      color:#e5efff;
+    }
+    .metric .value{
+      color:#7ff0d5;
+      font-weight:700;
+      min-width:42px;
+      text-align:left;
+    }
+    input[type="range"]{
+      width:100%;
+      accent-color:var(--secondary);
+    }
+    .summary{
+      background:linear-gradient(135deg,rgba(52,211,180,.08),rgba(127,179,255,.08));
+      border:1px solid #24405f;
+      border-radius:18px;
+      padding:16px;
+    }
+    .summary p{
+      margin:8px 0;
+      line-height:1.9;
+      color:#e7f1ff;
+    }
+    .summary strong{color:#9ec6ff}
+    .progress-wrap{
+      margin:10px 0 18px;
+    }
+    .progress-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+      gap:10px;
+    }
+    .progress-label{
+      color:#dceaff;
+      font-weight:700;
+    }
+    .progress-value{
+      color:#7ff0d5;
+      font-weight:700;
+    }
+    .progress-bar{
+      width:100%;
+      height:14px;
+      background:#0f1728;
+      border:1px solid var(--line);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress-fill{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#34d3b4,#7fb3ff);
+      transition:width .25s ease;
+    }
+    .footer{
+      text-align:center;
+      color:var(--muted);
+      font-size:13px;
+      margin-top:10px;
+      padding-top:12px;
+    }
+    .hint{
+      color:var(--muted);
+      font-size:13px;
+      margin-top:8px;
+      line-height:1.7;
+    }
+    .install-tip{
+      margin-top:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(52,211,180,.08);
+      border:1px solid rgba(52,211,180,.18);
+      color:#dffcf4;
+      font-size:14px;
+      line-height:1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>خطة مكملاتي اليومية</h1>
+      <p>الثبات أهم من المثالية.</p>
+      <p>الهدف: طاقة أفضل، نوم أهدأ، تقليل التوتر، وتصحيح نقص فيتامين د بروتين بسيط وثابت.</p>
+      <div class="date" id="currentDate">التاريخ: --</div>
+      <div class="install-tip">على الجوال: افتح الصفحة من المتصفح ثم اختر "إضافة إلى الشاشة الرئيسية" أو "Install app".</div>
+    </section>
+
+    <div class="grid">
+      <main>
+        <section class="card">
+          <h2>جدولي اليومي</h2>
+          <p class="sub">الخطة تشمل: D3، Ubiquinol، Ashwagandha، Magnesium.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>المكمل</th>
+                <th>الجرعة</th>
+                <th>الوقت</th>
+                <th>مع الأكل أو لا</th>
+                <th>الهدف</th>
+                <th>ملاحظات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sports Research Vegan Vitamin D3 5000 IU</td>
+                <td>كبسولة واحدة يوميًا</td>
+                <td>مع أول وجبة</td>
+                <td><span class="badge b-food">مع الأكل</span></td>
+                <td>رفع دال، دعم العظام والمناعة</td>
+                <td>خذها يوميًا مع الطعام.</td>
+              </tr>
+              <tr>
+                <td>Life Extension Ubiquinol CoQ10 100 mg</td>
+                <td>كبسولة واحدة يوميًا</td>
+                <td>مع أول وجبة</td>
+                <td><span class="badge b-food">مع الأكل</span></td>
+                <td>طاقة خلوية، دعم النشاط</td>
+                <td>يفضل في النهار.</td>
+              </tr>
+              <tr>
+                <td>Holista Ashwagandha 600 mg</td>
+                <td>كبسولة واحدة</td>
+                <td>بعد العشاء</td>
+                <td><span class="badge b-food">أفضل مع الأكل</span></td>
+                <td>تهدئة، دعم التوتر، نوم أفضل</td>
+                <td>ابدأ يوم بعد يوم إذا أردت التدرج.</td>
+              </tr>
+              <tr>
+                <td>Trace Magnesium Glycinate 120 mg</td>
+                <td>كبسولة واحدة يوميًا</td>
+                <td>قبل النوم 30–60 دقيقة</td>
+                <td><span class="badge b-night">قبل النوم</span></td>
+                <td>استرخاء، نوم، تهدئة</td>
+                <td>لا ترفع الجرعة من نفسك.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card">
+          <h2>روتين اليوم</h2>
+
+          <div class="progress-wrap">
+            <div class="progress-top">
+              <div class="progress-label">تقدم اليوم</div>
+              <div class="progress-value" id="todayProgressText">0%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="todayProgressFill"></div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button onclick="markToday()">تثبيت اليوم</button>
+            <button class="danger" onclick="undoToday()">مسحت جرعة اليوم بالغلط</button>
+          </div>
+
+          <div class="timeline">
+            <div class="step">
+              <strong>مع أول وجبة</strong>
+              <small>خذ D3 + Ubiquinol مع الأكل.</small>
+            </div>
+            <div class="step">
+              <strong>بعد العشاء</strong>
+              <small>خذ Ashwagandha 600 mg.</small>
+            </div>
+            <div class="step">
+              <strong>قبل النوم</strong>
+              <small>خذ Magnesium Glycinate قبل النوم بـ 30–60 دقيقة.</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>تتبع 7 أيام</h2>
+          <div class="actions">
+            <button onclick="markToday()">تثبيت اليوم</button>
+            <button class="secondary" onclick="markAllWeek()">تحديد الأسبوع كامل</button>
+            <button class="danger" onclick="undoToday()">التراجع عن اليوم</button>
+            <button class="ghost" onclick="resetWeek()">إعادة التعيين</button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>اليوم</th>
+                <th>D3</th>
+                <th>CoQ10</th>
+                <th>Ashwagandha</th>
+                <th>Magnesium</th>
+              </tr>
+            </thead>
+            <tbody id="weekBody"></tbody>
+          </table>
+        </section>
+      </main>
+
+      <aside>
+        <section class="card">
+          <h2>ملاحظات مهمة</h2>
+          <ul class="notes">
+            <li>D3: كبسولة واحدة يوميًا مع الطعام.</li>
+            <li>Ubiquinol: كبسولة واحدة يوميًا مع أول وجبة.</li>
+            <li>Ashwagandha: كبسولة واحدة بعد العشاء، وبالتدرج إذا كانت المعدة حساسة.</li>
+            <li>Magnesium Glycinate: كبسولة واحدة قبل النوم بـ 30–60 دقيقة.</li>
+          </ul>
+        </section>
+
+        <section class="card">
+          <h2>مؤشرات أتابعها يوميًا</h2>
+          <div class="metrics">
+            <div class="metric">
+              <div class="top">
+                <span>الطاقة</span>
+                <div class="value" id="energyVal">5/10</div>
+              </div>
+              <input type="range" min="1" max="10" value="5" id="energy">
+            </div>
+
+            <div class="metric">
+              <div class="top">
+                <span>جودة النوم</span>
+                <div class="value" id="sleepVal">5/10</div>
+              </div>
+              <input type="range" min="1" max="10" value="5" id="sleep">
+            </div>
+
+            <div class="metric">
+              <div class="top">
+                <span>صفاء المزاج</span>
+                <div class="value" id="moodVal">5/10</div>
+              </div>
+              <input type="range" min="1" max="10" value="5" id="mood">
+            </div>
+
+            <div class="metric">
+              <div class="top">
+                <span>راحة البطن</span>
+                <div class="value" id="gutVal">5/10</div>
+              </div>
+              <input type="range" min="1" max="10" value="5" id="gut">
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>ملخص سريع</h2>
+          <div class="summary">
+            <p><strong>مع أول وجبة:</strong> D3 + CoQ10</p>
+            <p><strong>بعد العشاء:</strong> Ashwagandha</p>
+            <p><strong>قبل النوم:</strong> Magnesium</p>
+            <p><strong>الهدف:</strong> طاقة + هدوء + نوم + تصحيح نقص دال</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="footer">نسخة شخصية للمتابعة اليومية</div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js');
+      });
+    }
+
+    const days = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+    const supplements = ['d3','coq10','ash','mag'];
+    const weekBody = document.getElementById('weekBody');
+
+    function getTodayArabicIndex(){
+      const jsDay = new Date().getDay();
+      const map = {6:0,0:1,1:2,2:3,3:4,4:5,5:6};
+      return map[jsDay];
+    }
+
+    function saveWeekState(){
+      const state = {};
+      days.forEach((day, i) => {
+        supplements.forEach(s => {
+          const id = `${s}-${i}`;
+          state[id] = document.getElementById(id)?.checked || false;
+        });
+      });
+      localStorage.setItem('mySuppWeekStatePWAFinal', JSON.stringify(state));
+      updateTodayProgress();
+    }
+
+    function loadWeekState(){
+      const raw = localStorage.getItem('mySuppWeekStatePWAFinal');
+      if(!raw) return;
+      const state = JSON.parse(raw);
+      Object.keys(state).forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.checked = state[id];
+      });
+    }
+
+    function buildWeekTable(){
+      weekBody.innerHTML = '';
+      days.forEach((day, i) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${day}</strong></td>
+          <td class="check-cell"><input type="checkbox" id="d3-${i}" onchange="saveWeekState()"></td>
+          <td class="check-cell"><input type="checkbox" id="coq10-${i}" onchange="saveWeekState()"></td>
+          <td class="check-cell"><input type="checkbox" id="ash-${i}" onchange="saveWeekState()"></td>
+          <td class="check-cell"><input type="checkbox" id="mag-${i}" onchange="saveWeekState()"></td>
+        `;
+        weekBody.appendChild(tr);
+      });
+      loadWeekState();
+      updateTodayProgress();
+    }
+
+    function markToday(){
+      const i = getTodayArabicIndex();
+      supplements.forEach(s => {
+        const el = document.getElementById(`${s}-${i}`);
+        if(el) el.checked = true;
+      });
+      saveWeekState();
+    }
+
+    function undoToday(){
+      const i = getTodayArabicIndex();
+      supplements.forEach(s => {
+        const el = document.getElementById(`${s}-${i}`);
+        if(el) el.checked = false;
+      });
+      saveWeekState();
+    }
+
+    function markAllWeek(){
+      days.forEach((_, i) => {
+        supplements.forEach(s => {
+          const el = document.getElementById(`${s}-${i}`);
+          if(el) el.checked = true;
+        });
+      });
+      saveWeekState();
+    }
+
+    function resetWeek(){
+      if(!confirm('هل تريد تصفير تتبع الأسبوع بالكامل؟')) return;
+      days.forEach((_, i) => {
+        supplements.forEach(s => {
+          const el = document.getElementById(`${s}-${i}`);
+          if(el) el.checked = false;
+        });
+      });
+      saveWeekState();
+    }
+
+    function updateTodayProgress(){
+      const i = getTodayArabicIndex();
+      let done = 0;
+      supplements.forEach(s => {
+        const el = document.getElementById(`${s}-${i}`);
+        if(el && el.checked) done++;
+      });
+      const percent = Math.round((done / supplements.length) * 100);
+      document.getElementById('todayProgressText').textContent = percent + '%';
+      document.getElementById('todayProgressFill').style.width = percent + '%';
+    }
+
+    function setCurrentDate(){
+      const el = document.getElementById('currentDate');
+      const now = new Date();
+      const fmt = new Intl.DateTimeFormat('ar-SA', {
+        weekday:'long',
+        year:'numeric',
+        month:'long',
+        day:'numeric'
+      });
+      el.textContent = 'التاريخ: ' + fmt.format(now);
+    }
+
+    function saveMetric(id){
+      const val = document.getElementById(id).value;
+      localStorage.setItem('metric_pwa_final_' + id, val);
+      document.getElementById(id + 'Val').textContent = val + '/10';
+    }
+
+    function loadMetric(id, fallback=5){
+      const saved = localStorage.getItem('metric_pwa_final_' + id) || fallback;
+      document.getElementById(id).value = saved;
+      document.getElementById(id + 'Val').textContent = saved + '/10';
+      document.getElementById(id).addEventListener('input', () => saveMetric(id));
+    }
+
+    buildWeekTable();
+    setCurrentDate();
+    ['energy','sleep','mood','gut'].forEach(id => loadMetric(id));
+  </script>
+</body>
+</html>
