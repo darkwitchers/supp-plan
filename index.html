@@ -464,10 +464,10 @@
 
   <script>
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js');
-      });
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/supp-plan/service-worker.js');
+  });
+}
 
     const days = ['السبت','الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
     const supplements = ['d3','coq10','ash','mag'];
